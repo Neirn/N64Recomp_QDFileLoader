@@ -1,8 +1,8 @@
-# Majora's Mask: Recompiled Mod Template
+# Quick 'n Dirty File Loader for Majora's Mask: Recompiled
 
-This is an example mod for Majora's Mask: Recompiled that can be used as a template for creating mods. It has a basic build system, headers, sample code, and a mod config toml.
+This is a mod for Majora's Mask: Recompiled that exposes some basic utilities for reading files from the operating system.
 
-Example code for using the recompui API to build ingame UI can be found in the `ui-example` branch.
+The API is unstable and make break between updates.
 
 ### Writing mods
 See [this document](https://hackmd.io/fMDiGEJ9TBSjomuZZOgzNg) for an explanation of the modding framework, including how to write function patches and perform interop between different mods.

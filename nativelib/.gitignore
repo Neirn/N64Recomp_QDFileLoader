@@ -10,4 +10,3 @@
 *.pdb
 *.exp
 .vscode/settings.json
-*.code-workspace
