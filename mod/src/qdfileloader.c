@@ -86,7 +86,7 @@ RECOMP_EXPORT int QDFL_isDirectory(const char *path) {
     return QDFL_N_isDirectory(path) ? 1 : 0;
 }
 
-QDFL_STATUS QDFL_getFileSize(const char *path, unsigned long *out) {
+RECOMP_EXPORT QDFL_STATUS QDFL_getFileSize(const char *path, unsigned long *out) {
     if (!QDFL_isExist(path)) {
         logStatus(path, QDFL_STATUS_ERR_PATH_NO_EXIST);
         return QDFL_STATUS_ERR_PATH_NO_EXIST;
