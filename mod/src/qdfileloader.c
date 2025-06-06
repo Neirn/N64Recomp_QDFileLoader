@@ -19,7 +19,7 @@ typedef enum {
     QDFL_STATUS_EXPECTED_DIR,
     QDFL_STATUS_ERR_FILE_TOO_LARGE,
     QDFL_STATUS_ERR_READ_FILE,
-} QDFL_STATUS;
+} QDFL_Status;
 
 RECOMP_IMPORT(".", bool QDFL_N_isExist(const char *path));
 RECOMP_IMPORT(".", bool QDFL_N_isFile(const char *path));
@@ -30,7 +30,7 @@ RECOMP_IMPORT(".", u32 QDFL_N_getNumDirEntries(const char *dirPath));
 RECOMP_IMPORT(".", u32 QDFL_N_getDirEntryNameLengthByIndex(const char *dirPath, u32 index));
 RECOMP_IMPORT(".", bool QDFL_N_getDirEntryNameByIndex(const char *dirPath, u32 index, u8 *bufferPtr, u32 bufferSize));
 
-void logStatus(const char *path, QDFL_STATUS s) {
+void logStatus(const char *path, QDFL_Status s) {
     switch (s) {
         case QDFL_STATUS_OK:
             recomp_printf("QDFL_STATUS_OK: SimpleFileLoader operation completed successfully.");
@@ -86,7 +86,7 @@ RECOMP_EXPORT int QDFL_isDirectory(const char *path) {
     return QDFL_N_isDirectory(path) ? 1 : 0;
 }
 
-RECOMP_EXPORT QDFL_STATUS QDFL_getFileSize(const char *path, unsigned long *out) {
+RECOMP_EXPORT QDFL_Status QDFL_getFileSize(const char *path, unsigned long *out) {
     if (!QDFL_isExist(path)) {
         logStatus(path, QDFL_STATUS_ERR_PATH_NO_EXIST);
         return QDFL_STATUS_ERR_PATH_NO_EXIST;
@@ -102,9 +102,9 @@ RECOMP_EXPORT QDFL_STATUS QDFL_getFileSize(const char *path, unsigned long *out)
     return QDFL_STATUS_OK;
 }
 
-RECOMP_EXPORT QDFL_STATUS QDFL_loadFile(const char *path, void **out) {
+RECOMP_EXPORT QDFL_Status QDFL_loadFile(const char *path, void **out) {
     u32 fileSize;
-    QDFL_STATUS status = QDFL_getFileSize(path, &fileSize);
+    QDFL_Status status = QDFL_getFileSize(path, &fileSize);
 
     if (status != QDFL_STATUS_OK) {
         logStatus(path, status);
@@ -127,7 +127,7 @@ RECOMP_EXPORT QDFL_STATUS QDFL_loadFile(const char *path, void **out) {
     }
 }
 
-RECOMP_EXPORT QDFL_STATUS QDFL_getNumDirEntries(const char *dirPath, unsigned long *out) {
+RECOMP_EXPORT QDFL_Status QDFL_getNumDirEntries(const char *dirPath, unsigned long *out) {
     if (!QDFL_isExist(dirPath)) {
         logStatus(dirPath, QDFL_STATUS_ERR_PATH_NO_EXIST);
         return QDFL_STATUS_ERR_PATH_NO_EXIST;
@@ -143,7 +143,7 @@ RECOMP_EXPORT QDFL_STATUS QDFL_getNumDirEntries(const char *dirPath, unsigned lo
     return QDFL_STATUS_OK;
 }
 
-RECOMP_EXPORT QDFL_STATUS QDFL_getDirEntryNameByIndex(const char *dirPath, unsigned long index, char **out) {
+RECOMP_EXPORT QDFL_Status QDFL_getDirEntryNameByIndex(const char *dirPath, unsigned long index, char **out) {
     if (!QDFL_isExist(dirPath)) {
         logStatus(dirPath, QDFL_STATUS_ERR_PATH_NO_EXIST);
         return QDFL_STATUS_ERR_PATH_NO_EXIST;
