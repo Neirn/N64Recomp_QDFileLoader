@@ -102,6 +102,29 @@ RECOMP_EXPORT QDFL_Status QDFL_getFileSize(const char *path, unsigned long *out)
     return QDFL_STATUS_OK;
 }
 
+RECOMP_EXPORT QDFL_Status QDFL_loadFileIntoBuffer(const char *path, void *buffer, size_t bufferSize) {
+    u32 fileSize;
+    QDFL_Status status = QDFL_getFileSize(path, &fileSize);
+
+    if (status != QDFL_STATUS_OK) {
+        logStatus(path, status);
+        return status;
+    }
+
+    if (fileSize > bufferSize) {
+        logStatus(path, QDFL_STATUS_ERR_FILE_TOO_LARGE);
+        return QDFL_STATUS_ERR_FILE_TOO_LARGE;
+    }
+
+    u8 *file = buffer;
+
+    if (QDFL_N_copyToBuffer(path, file, fileSize)) {
+        return QDFL_STATUS_OK;
+    } else {
+        return QDFL_STATUS_ERR_READ_FILE;
+    }
+}
+
 RECOMP_EXPORT QDFL_Status QDFL_loadFile(const char *path, void **out) {
     u32 fileSize;
     QDFL_Status status = QDFL_getFileSize(path, &fileSize);
@@ -115,16 +138,7 @@ RECOMP_EXPORT QDFL_Status QDFL_loadFile(const char *path, void **out) {
 
     file = recomp_alloc(fileSize);
 
-    if (QDFL_N_copyToBuffer(path, file, fileSize)) {
-        *out = file;
-
-        return QDFL_STATUS_OK;
-    }
-    else {
-        *out = NULL;
-
-        return QDFL_STATUS_ERR_READ_FILE;
-    }
+    return QDFL_loadFileIntoBuffer(path, file, fileSize);
 }
 
 RECOMP_EXPORT QDFL_Status QDFL_getNumDirEntries(const char *dirPath, unsigned long *out) {
